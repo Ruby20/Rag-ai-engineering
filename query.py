@@ -38,11 +38,12 @@ def build_prompt(question: str, chunks: list[dict]) -> str:
     return f"Context:\n{context}\n\nQuestion: {question}"
 
 
-def ask(question: str) -> dict:
-    cached = get_cached(question)
-    if cached:
-        print("(cache hit)")
-        return cached
+def ask(question: str, skip_cache: bool = False) -> dict:
+    if not skip_cache:
+        cached = get_cached(question)
+        if cached:
+            print("(cache hit)")
+            return cached
 
     expanded = expand_query(question)
     if expanded != question:
