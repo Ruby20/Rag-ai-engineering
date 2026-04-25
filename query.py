@@ -3,8 +3,10 @@ Usage:
     python query.py "What is the attention mechanism?"
 """
 
+import os
 import sys
 
+from dotenv import load_dotenv
 from openai import OpenAI
 
 from cache import get_cached, set_cached
@@ -12,7 +14,12 @@ from db import search_chunks
 from embedder import embed_query
 from expander import expand_query
 
-client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+load_dotenv()
+
+client = OpenAI(
+    base_url=os.environ["OLLAMA_BASE_URL"],
+    api_key="ollama",
+)
 
 SYSTEM_PROMPT = """\
 You are a research assistant. Answer the user's question using ONLY the \
@@ -50,7 +57,7 @@ def ask(question: str) -> dict:
     prompt = build_prompt(question, chunks)
 
     response = client.chat.completions.create(
-        model="llama3.2",
+        model=os.environ["OLLAMA_MODEL"],
         temperature=0,
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},

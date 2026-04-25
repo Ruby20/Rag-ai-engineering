@@ -1,11 +1,11 @@
 import os
 import psycopg2
 from psycopg2.extras import execute_values
+from dotenv import load_dotenv
 
-DSN = os.getenv(
-    "DATABASE_URL",
-    "postgresql://rag_user:rag_pass@localhost:5432/rag_db",
-)
+load_dotenv()
+
+DSN = os.environ["DATABASE_URL"]
 
 
 def get_conn():

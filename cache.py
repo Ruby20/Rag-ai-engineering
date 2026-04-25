@@ -4,6 +4,9 @@ import os
 from typing import Optional
 
 import redis
+from dotenv import load_dotenv
+
+load_dotenv()
 
 CACHE_TTL = int(os.getenv("CACHE_TTL", 3600))  # seconds
 

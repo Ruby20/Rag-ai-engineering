@@ -1,6 +1,14 @@
+import os
+
+from dotenv import load_dotenv
 from openai import OpenAI
 
-_client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+load_dotenv()
+
+_client = OpenAI(
+    base_url=os.environ["OLLAMA_BASE_URL"],
+    api_key="ollama",
+)
 
 _PROMPT = """\
 Rewrite the question below using full terminology, expanded acronyms, and relevant synonyms.
@@ -12,7 +20,7 @@ Question: {question}"""
 def expand_query(question: str) -> str:
     try:
         response = _client.chat.completions.create(
-            model="llama3.2",
+            model=os.environ["OLLAMA_MODEL"],
             temperature=0,
             messages=[{"role": "user", "content": _PROMPT.format(question=question)}],
         )
